@@ -1,0 +1,19 @@
+.formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .formControl {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+  }
+  
+  .formControl:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  

@@ -1,0 +1,6 @@
+POST https://agroweb-5dxm.onrender.com/api/crud-product/create
+Content-Type: application/json
+Authorization: Bearer YOUR_ACCESS_TOKEN
+{
+    
+}
