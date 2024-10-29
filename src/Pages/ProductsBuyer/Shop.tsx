@@ -1,7 +1,9 @@
+// @ts-ignore
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../../Components/Footer';
 import Navbar from '../../Components/Navbar';
+// @ts-ignore
 import { allProducts, allProductsProps, CategoryProps, itemSelect } from '../../types';
 
 const PublicProductList = () => {
@@ -14,6 +16,7 @@ const PublicProductList = () => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [sortOrder, setSortOrder] = useState('ASC');
+    // @ts-ignore
     const [selectedProduct, setSelectedProduct] = useState<allProductsProps>();
 
     // Obtener todos los productos al cargar el componente

@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useLocation } from "react-router-dom";
 import Footer from "../../Components/Footer"
 import Navbar from "../../Components/Navbar"

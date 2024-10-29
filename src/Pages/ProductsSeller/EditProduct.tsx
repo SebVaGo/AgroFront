@@ -10,6 +10,7 @@ export default function EditProduct() {
     const navigate = useNavigate();
     const { producto } = location.state; // Obtener el producto desde el estado
     const [categorias, setCategorias] = useState<CategorySelect>();
+    // @ts-ignore
     const [selectedCategory, setSelectedCategory] = useState(producto.Item?.Categoria?.id_categoria || '');
     const [items, setItems] = useState<itemSelect>();
     const [selectedItem, setSelectedItem] = useState(producto.id_item || '');

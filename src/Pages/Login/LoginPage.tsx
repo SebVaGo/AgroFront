@@ -15,6 +15,7 @@ const Login = () => {
     "id_usuario":number , "tipo_usuario":number
   }>>();  // Perfiles disponibles si hay más de uno
   const [selectedPerfil, setSelectedPerfil] = useState('');  // Perfil seleccionado por el usuario
+  // @ts-ignore
   const [idUsuario, setIdUsuario] = useState<number>();  // ID del usuario
   const navigate = useNavigate();  // Para redirigir a otras rutas
 

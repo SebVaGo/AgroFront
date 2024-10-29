@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { datosUsuario, userDniRucData, userRegisterProps, UserType, userVerifyData } from "../types";
+import { datosUsuario, userDniRucData, UserType, userVerifyData } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 export default function Register(){
@@ -79,6 +78,7 @@ export default function Register(){
     const handleEnviarCodigo = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try{
+            // @ts-ignore
             const response = await axios.post(`https://agroweb-5dxm.onrender.com/api/auth/enviar-codigo`, {
                 correo: formData.correo,  // Asegúrate de que 'correo' está correctamente definido
                 dni_ruc: formData.dniRuc,  // Asegúrate de que 'dniRuc' está correctamente definido
@@ -95,6 +95,7 @@ export default function Register(){
     const handleVerificarCodigo = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
+            // @ts-ignore
             const response = await axios.post(`https://agroweb-5dxm.onrender.com/api/auth/verify-email`, { 
               codigo: formData.codigoVerificacion, 
               dni_ruc: formData.dniRuc 

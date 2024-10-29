@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+// @ts-ignore
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+// @ts-ignore
 import Modal from '../utils/Modal'; // Asegúrate de que la ruta sea correcta
 
 interface Perfil {
@@ -24,6 +26,7 @@ export default function useLogin(){
   const [timeLeft, setTimeLeft] = useState<number | null>(null); 
   const [perfiles, setPerfiles] = useState<Perfil[]>([]);
   const [selectedPerfil, setSelectedPerfil] = useState(''); 
+  // @ts-ignore
   const [idUsuario, setIdUsuario] = useState<number | null>(null); 
   const [showModal, setShowModal] = useState(false);  // Controla si el modal se muestra o no
   const navigate = useNavigate();
