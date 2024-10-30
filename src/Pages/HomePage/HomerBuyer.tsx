@@ -15,6 +15,9 @@ import Kiwi from "../../../Public/kiwi.jpg";
 import Uvas from "../../../Public/uvas.jpg";
 import Mandarina from "../../../Public/mandarina.jpg"; 
 import Mango from "../../../Public/mango.jpg";
+import { useEffect, useState } from "react";
+import { allProductsProps } from "../../types";
+import axios from "axios";
 
 const INITIAL_CATEGORY = [
     {
@@ -153,6 +156,23 @@ const POPULAR_PRODUCTS = [
 ]
 
 export default function HomerBuyer() {
+    const [productos, setProductos] = useState<allProductsProps>();
+    const [mensaje, setMensaje] = useState("");
+    useEffect(() => {
+        const fetchProductos = async () => {
+            try {
+                const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/all");
+                setProductos(response.data.productos);
+                console.log(response.data.productos);
+                setMensaje("");
+            } catch (error) {
+                console.error('Error al obtener los productos:', error);
+                setMensaje('Error al obtener los productos.');
+            }
+        };
+        fetchProductos();
+    }, []);
+
     return (
         <div>
             <div>
@@ -173,15 +193,26 @@ export default function HomerBuyer() {
                 <h1 className="text-2xl md:text-3xl font-bold mt-8 text-center">PRODUCTOS POPULARES</h1>
                 <div className="mt-5 flex justify-center w-5/6">
                     <div className="grid grid-cols-2 w-5/6 md:grid-cols-5">
-                        {
-                        POPULAR_PRODUCTS.map(prod => {
-                            return(
-                            <PopularProduct key={prod.name} product={prod}/>
+                    {
+                        Array.isArray(productos) && productos.slice(0, 8).map(prod => {
+                            return (
+                                <PopularProduct key={prod.name} 
+                                nombre_item={prod.nombre_item}
+                                precio={prod.precio}
+                                imagen_url={prod.imagen_url}
+                                id_producto = {prod.id_producto}
+                                descripcion = {prod.descripcion}
+                                stock = {prod.stock}
+                                categoria = {prod.categoria}
+                                medida = {prod.medida}
+                                vendedor = {prod.vendedor}
+                                 />
                             )
                         })
-                        }
+                    }
                     </div>
                 </div>
+            
             </div>
         </div>
     )

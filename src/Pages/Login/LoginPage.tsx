@@ -15,7 +15,6 @@ const Login = () => {
     "id_usuario":number , "tipo_usuario":number
   }>>();  // Perfiles disponibles si hay más de uno
   const [selectedPerfil, setSelectedPerfil] = useState('');  // Perfil seleccionado por el usuario
-  // @ts-ignore
   const [idUsuario, setIdUsuario] = useState<number>();  // ID del usuario
   const navigate = useNavigate();  // Para redirigir a otras rutas
 
@@ -157,6 +156,9 @@ const Login = () => {
         className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
+      <p className='text-center'>
+        ¿No tienes una cuenta? <a href="/register" className="text-sm text-blue-500 hover:underline"> Regístrate aquí.</a>
+      </p>
       <button
         type="submit"
         className="w-full px-4 py-2 text-sm font-medium text-white bg-green-500 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

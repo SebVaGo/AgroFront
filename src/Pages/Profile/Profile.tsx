@@ -8,7 +8,6 @@ import { userDniData, userRucData } from '../../types';
 export default function SellerProfile() {
     const nav = useNavigate();
     const [profileData, setProfileData] = useState<userDniData | userRucData | null>(null);
-    // @ts-ignore
     const [message, setMessage] = useState('');
     const [editingField, setEditingField] = useState('');
     const [editedData, setEditedData] = useState({
@@ -85,49 +84,54 @@ export default function SellerProfile() {
     return (
         <div >
             <Navbar />
-            <div className="w-full flex justify-center items-center h-screen">
-                <div className="flex w-3/4 h-3/4">
-                    <div className="border border-gray-700 rounded p-4 h-1/2">
-                        <h1 className='text-2xl font-bold mb-4'>Menú</h1>
-                        <div className='flex flex-col space-y-4'>
-                            <Link to="/" className='flex items-center w-full hover:bg-gray-300'>
+            <div className="w-full flex justify-center items-center my-20">
+                <div className="grid lg:flex w-3/4 h-3/4">
+                    <div className="border border-gray-700 h-full rounded-lg p-4 w-full lg:w-1/3">
+                        <h1 className="text-2xl font-bold mb-4">Menú</h1>
+                        <div className="flex flex-wrap lg:flex-col space-y-4">
+                            <Link to="/" className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg">
                                 <svg data-name="Layer 1" width="24" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M25 1a24 24 0 1 0 24 24A24 24 0 0 0 25 1Zm0 46a22 22 0 1 1 22-22 22 22 0 0 1-22 22Z"/><path d="M25 25.41a13 13 0 0 0-13 13 1 1 0 0 0 2 0 11 11 0 1 1 22 0 1 1 0 0 0 2 0 13 13 0 0 0-13-13ZM25 23.71a7 7 0 0 0 6.81-7.2A7 7 0 0 0 25 9.3a7 7 0 0 0-6.81 7.21 7 7 0 0 0 6.81 7.2Zm0-12.41a5 5 0 0 1 4.81 5.21 5 5 0 0 1-4.81 5.2 5 5 0 0 1-4.81-5.2A5 5 0 0 1 25 11.3Z"/></svg>
                                 <span className='ml-2'>General</span>
                             </Link>
-                            {profileData?.tipoUsuario.tipo === "COMPRADOR" ? 
-                            (<Link to="/shopping-cart" className='flex items-center hover:bg-gray-300'>
+
+                            {profileData?.tipoUsuario.tipo === "COMPRADOR" ? (
+                                <Link to="/shopping-cart" className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg">
                                 <svg className="lg:me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
                                 </svg>
                                 <span className='ml-2'>Carrito de compras</span>
-                            </Link>)
-                            : (<Link to="/my-products" className='flex items-center hover:bg-gray-300'>
-                                <svg className="lg:me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-                                </svg>
-                                <span className='ml-2'>Mis productos</span>
-                            </Link>)}
-                            <Link to="#" className='flex items-center hover:bg-gray-300'>
+                                </Link>
+                            ) : (
+                                <Link to="/my-products" className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg">
+                                    <svg className="lg:me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                                    </svg>
+                                    <span className='ml-2'>Mis productos</span>
+
+                                </Link>
+                            )}
+
+                            <Link to="#" className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg">
                                 <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M4 20v-7h7l-3.217 3.22A5.916 5.916 0 0 0 12 18a6 6 0 0 0 5.648-4h.018c.114-.325.201-.66.259-1h2.012A8 8 0 0 1 12 20h-.01a7.94 7.94 0 0 1-5.653-2.34L4 20Zm2.074-9H4.062a8 8 0 0 1 7.933-7H12a7.94 7.94 0 0 1 5.654 2.34L20 4v7h-7l3.222-3.22A5.915 5.915 0 0 0 12 6a6 6 0 0 0-5.648 4h-.018c-.115.325-.202.66-.259 1h-.001Z" fill="#000"/>
                                 </svg>
                                 <span className='ml-2'>Historial de compras</span>
                             </Link>
-                            <Link to="#" className='flex items-center hover:bg-gray-300'>
+
+                            <Link to="#" className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 50 50">
                                     <path d="M 25 3 C 18.363281 3 13 8.363281 13 15 L 13 20 L 9 20 C 7.355469 20 6 21.355469 6 23 L 6 47 C 6 48.644531 7.355469 50 9 50 L 41 50 C 42.644531 50 44 48.644531 44 47 L 44 23 C 44 21.355469 42.644531 20 41 20 L 37 20 L 37 15 C 37 8.363281 31.636719 3 25 3 Z M 25 5 C 30.566406 5 35 9.433594 35 15 L 35 20 L 15 20 L 15 15 C 15 9.433594 19.433594 5 25 5 Z M 9 22 L 41 22 C 41.554688 22 42 22.445313 42 23 L 42 47 C 42 47.554688 41.554688 48 41 48 L 9 48 C 8.445313 48 8 47.554688 8 47 L 8 23 C 8 22.445313 8.445313 22 9 22 Z M 25 30 C 23.300781 30 22 31.300781 22 33 C 22 33.898438 22.398438 34.6875 23 35.1875 L 23 38 C 23 39.101563 23.898438 40 25 40 C 26.101563 40 27 39.101563 27 38 L 27 35.1875 C 27.601563 34.6875 28 33.898438 28 33 C 28 31.300781 26.699219 30 25 30 Z"></path>
                                 </svg>
                                 <span className='ml-2'>Seguridad</span>
                             </Link>
-                            <button 
-                            className='flex items-center hover:bg-gray-300'
-                            onClick={handleLogout}>
+
+                            <button className="flex items-center w-full lg:w-auto p-2 hover:bg-gray-300 rounded-lg" onClick={handleLogout}>
                                 <svg viewBox="0 0 128 128" width="24" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M91 119H9V9h82V1H1v126h90z"/><path d="M40 60h8v8h-8zM90.8 96.8 123.7 64 90.8 31.2l-5.6 5.6L108.3 60H58v8h50.3L85.2 91.2z"/></svg>
                                 <span className='ml-2'>Cerrar sesión</span>
                             </button>
                         </div>
                     </div>
-                    <div className="w-3/4 h-full ml-4 items-center">
+                    <div className="h-full mt-4 lg:mt-0 ml-0 lg:ml-4 items-center w-full lg:w-3/4">
                         <div className='w-full border border-gray-700 border-b-0'>
                             <h1 className="text-2xl font-bold w-full px-8 py-1">Perfil de usuario</h1>
                         </div>

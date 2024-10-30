@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar (){
+    const [isOpenMenuProfile, setIsOpenMenuProfile] = useState(false);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const typeUser = sessionStorage.getItem('typeUser');
 
@@ -76,12 +77,33 @@ export default function Navbar (){
                                 </Link>
                                 :
                                 ""}
-                                <Link to="/profile" className="inline-flex items-center rounded-lg justify-center p-2 hover:text-green-600 text-sm font-medium leading-none text-white">
-                                    <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                    </svg>
-                                    Mi cuenta
-                                </Link>
+
+                                <div className="relative inline-block text-left">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsOpenMenuProfile(!isOpenMenuProfile)}
+                                        className="inline-flex items-center rounded-lg justify-center p-2 hover:text-green-600 text-sm font-medium leading-none text-white"
+                                        aria-expanded={isOpenMenu}
+                                        aria-haspopup="true"
+                                    >
+                                        <svg className="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                        </svg>
+                                        Mi cuenta
+                                    </button>
+
+                                        <div className={`origin-top-right absolute ${isOpenMenuProfile ? `` : `hidden`} right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`}>
+                                            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                <Link to="/profile" className="block text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Mi perfil</Link>
+                                                <button onClick={()=>{
+                                                    sessionStorage.removeItem('accessToken');
+                                                    sessionStorage.removeItem('typeUser');
+                                                    window.location.href = '/';
+                                                }} className="block w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 hover:text-red-700" role="menuitem">Cerrar Sesión</button>
+                                            </div>
+                                        </div>
+
+                                </div>
 
                             </div>
 
@@ -102,7 +124,7 @@ export default function Navbar (){
                      className={`bg-neutral-800 rounded-lg py-3 ${isOpenMenu ? `` : `hidden`} px-4 mt-4`}>
                         <ul className="text-white text-sm font-medium dark:text-white space-y-3">
                             <li>
-                            <Link to="/" className="flex text-sm font-medium text-white hover:text-green-600 ">
+                            <Link to="/homepage" className="flex text-sm font-medium text-white hover:text-green-600 ">
                                         Principal
                             </Link>
                             </li>

@@ -9,7 +9,7 @@ export default function NotFound(){
                     Page Not Found
                 </div>
                 <button className="mt-5">
-                    <Link to="/"
+                    <Link to="/homepage"
                 className="relative inline-block text-sm font-medium text-white group active:text-black focus:outline-none "
                     >
                     <span
