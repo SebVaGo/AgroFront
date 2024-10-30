@@ -8,6 +8,7 @@ import { userDniData, userRucData } from '../../types';
 export default function SellerProfile() {
     const nav = useNavigate();
     const [profileData, setProfileData] = useState<userDniData | userRucData | null>(null);
+    //@ts-ignore
     const [message, setMessage] = useState('');
     const [editingField, setEditingField] = useState('');
     const [editedData, setEditedData] = useState({

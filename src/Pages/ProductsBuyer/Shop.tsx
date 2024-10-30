@@ -1,4 +1,5 @@
 
+//@ts-ignore
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../../Components/Footer';
@@ -16,6 +17,7 @@ const PublicProductList = () => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [sortOrder, setSortOrder] = useState('ASC');
+    //@ts-ignore
     const [selectedProduct, setSelectedProduct] = useState<allProductsProps>();
 
     // Obtener todos los productos al cargar el componente
@@ -24,7 +26,7 @@ const PublicProductList = () => {
             try {
                 const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/all");
                 setProductos(response.data.productos);
-                setMensaje("");
+                    setMensaje("");
             } catch (error) {
                 console.error('Error al obtener los productos:', error);
                 setMensaje('Error al obtener los productos.');

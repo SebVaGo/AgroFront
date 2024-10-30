@@ -41,7 +41,7 @@ const INITIAL_CATEGORY = [
     image: Carnes
     }
 ]
-
+//@ts-ignore
 const POPULAR_PRODUCTS = [
     {
     name: "Tomate",
@@ -157,6 +157,7 @@ const POPULAR_PRODUCTS = [
 
 export default function HomerBuyer() {
     const [productos, setProductos] = useState<allProductsProps>();
+    //@ts-ignore
     const [mensaje, setMensaje] = useState("");
     useEffect(() => {
         const fetchProductos = async () => {
