@@ -208,7 +208,10 @@ const PublicProductList = () => {
                     ))}
                 </div>
                 ) : (
-                !mensaje && <p className="text-gray-500">Cargando productos...</p>
+                !mensaje && 
+                <div className="h-96 flex items-center justify-center">
+                    <p className="text-xl font-bold mt-8 text-center">Cargando productos..</p>
+                </div>
                 )}
 
                 {/*{/* Mostrar los detalles del producto seleccionado 

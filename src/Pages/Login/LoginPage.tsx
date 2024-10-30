@@ -89,7 +89,7 @@ const Login = () => {
       sessionStorage.setItem('accessToken', accessToken);
       setAccessToken(accessToken);
       setMessage('¡Perfil seleccionado correctamente!');
-      navigate('/homepage');  // Redirigir después de seleccionar el perfil
+      navigate('/');  // Redirigir después de seleccionar el perfil
     } catch (error) {
       setMessage('Error al seleccionar el perfil.');
       console.error('Error seleccionando perfil:', error);
