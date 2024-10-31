@@ -15,6 +15,7 @@ const Login = () => {
   const [timeLeft, setTimeLeft] = useState<number>(); 
   const [perfiles, setPerfiles] = useState<Array<{ "id_usuario": number, "tipo_usuario": number }>>(); 
   const [selectedPerfil, setSelectedPerfil] = useState('');
+ //@ts-ignore
   const [idUsuario, setIdUsuario] = useState<number>();  
   const navigate = useNavigate(); 
 
