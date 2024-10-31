@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { datosUsuario, userDniRucData, UserType, userVerifyData } from "../../types";
 import { useNavigate } from "react-router-dom";
+import fondoAgroWeb from '../../utils/images/FondoAgroWeb.webp';
+import logo from '../../utils/images/Logo.jpg';
 
 export default function Register(){
     const nav = useNavigate();
@@ -130,70 +132,84 @@ export default function Register(){
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="max-w-lg mx-auto my-auto w-3/4 bg-white shadow-lg rounded-lg overflow-hidden"> 
-                <div className="px-8 py-6"> {/* Cambiado px-6 py-4 a px-8 py-6 */}
-                    <h2 className="text-2xl font-bold text-center text-gray-800">Registro de Usuario</h2>
-                    {inicio && <form onSubmit={handleSubmitDniRuc} className="mt-6">
-                        {/* Input para DNI o RUC */}
-                        <div className="mb-4">
-                            <label htmlFor="dniRuc" className="block text-gray-700">Ingrese su DNI o RUC:</label>
-                            <input
-                            id="dniRuc"
-                            type="text"
-                            name="dniRuc"
-                            value={formData.dniRuc}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Ingrese su DNI o RUC"
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                            />
-                        </div>
-
-                        {/* Selección de tipo de usuario */}
-                        <div className="mb-4">
-                            <label htmlFor="id_tipo_usuario" className="block text-gray-700">Tipo de Usuario:</label>
-                            <select
-                            id="id_tipo_usuario"
-                            name="id_tipo_usuario"
-                            value={formData.id_tipo_usuario}
-                            onChange={handleSelectChange}
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                            >
-                            {tiposUsuario && Array.isArray(tiposUsuario) && tiposUsuario.map(tipo => (
-                            <option key={tipo.id_tipo_usuario} value={tipo.id_tipo_usuario}>
-                            {tipo.tipo}
-                            </option>
-                            ))}
-                            </select>
-                        </div>
-
-                        {/* Botón de envío de DNI o RUC */}
-                        <div className="flex justify-center">
-                            <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            Consultar
-                            </button>
-                        </div>
-                    </form>}
+        <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${fondoAgroWeb})` }}>
+            <div className="flex w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-105">
+                {/* Columna Izquierda: Información General */}
+                <div className="flex flex-col items-center justify-center w-1/2 p-12 bg-white-100">
+                    <h1 className="text-5xl font-bold text-green-600 mt-0 mb-6">AgroWeb</h1>
+                    <img
+                        src={logo} 
+                        alt="Imagen de AgroWeb"
+                        className="rounded-2xl shadow-lg w-90 h-70 object-cover"
+                    />
+                    <p className="mt-4 text-center text-gray-700 text-lg">
+                        Conéctate con el futuro de la agricultura sostenible.
+                        Únete a nuestra comunidad y descubre oportunidades para crecer.
+                    </p>
                 </div>
-                {datosUsuario && (
-                    <div className="p-4 ">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Datos Obtenidos</h3>
-                        {formData.dniRuc.length === 8 ? (
-                            <>
-                                <p className="text-gray-700 mb-2"><strong>Nombres:</strong> {`${datosUsuario.primer_nombre} ${datosUsuario.segundo_nombre || ''}`}</p>
-                                <p className="text-gray-700 mb-2"><strong>Apellidos:</strong> {`${datosUsuario.apellido_paterno} ${datosUsuario.apellido_materno}`}</p>
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-gray-700 mb-2"><strong>Razón Social:</strong> {datosUsuario.razon_social}</p>
-                                <p className="text-gray-700 mb-2"><strong>Dirección:</strong> {`${datosUsuario.direccion}, ${datosUsuario.departamento}, ${datosUsuario.provincia}, ${datosUsuario.distrito}`}</p>
-                                <p className="text-gray-700 mb-2"><strong>Estado:</strong> {datosUsuario.estado}</p>
-                                <p className="text-gray-700 mb-2"><strong>Condición:</strong> {datosUsuario.condicion}</p>
-                            </>
-                        )}
-                    </div>
-                )}
+
+                {/* Columna Derecha: Formulario de Registro */}
+                <div className="w-1/2 p-8">
+                    <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Registro de Usuario</h2>
+                    
+                    {inicio && (
+                        <form onSubmit={handleSubmitDniRuc} className="space-y-6">
+                            <div>
+                                <label htmlFor="dniRuc" className="block text-gray-700 font-medium">Ingrese su DNI o RUC:</label>
+                                <input
+                                    id="dniRuc"
+                                    type="text"
+                                    name="dniRuc"
+                                    value={formData.dniRuc}
+                                    onChange={handleInputChange}
+                                    required
+                                    placeholder="Ingrese su DNI o RUC"
+                                    className="w-full px-4 py-3 mt-1 border rounded-lg shadow-sm focus:ring-2 focus:ring-green-500"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label htmlFor="id_tipo_usuario" className="block text-gray-700 font-medium">Tipo de Usuario:</label>
+                                <select
+                                    id="id_tipo_usuario"
+                                    name="id_tipo_usuario"
+                                    value={formData.id_tipo_usuario}
+                                    onChange={handleSelectChange}
+                                    className="w-full px-4 py-3 mt-1 border rounded-lg shadow-sm focus:ring-2 focus:ring-green-500"
+                                >
+                                    {tiposUsuario && Array.isArray(tiposUsuario) && tiposUsuario.map(tipo => (
+                                        <option key={tipo.id_tipo_usuario} value={tipo.id_tipo_usuario}>
+                                            {tipo.tipo}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <button type="submit" className="w-full bg-green-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                Consultar
+                            </button>
+                        </form>
+                    )}
+
+                    {/* Información de Usuario Obtenida */}
+                    {datosUsuario && (
+                        <div className="mt-6 space-y-4 text-gray-700">
+                            <h3 className="text-lg font-semibold">Datos Obtenidos</h3>
+                            {formData.dniRuc.length === 8 ? (
+                                <>
+                                    <p><strong>Nombres:</strong> {`${datosUsuario.primer_nombre} ${datosUsuario.segundo_nombre || ''}`}</p>
+                                    <p><strong>Apellidos:</strong> {`${datosUsuario.apellido_paterno} ${datosUsuario.apellido_materno}`}</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p><strong>Razón Social:</strong> {datosUsuario.razon_social}</p>
+                                    <p><strong>Dirección:</strong> {`${datosUsuario.direccion}, ${datosUsuario.departamento}, ${datosUsuario.provincia}, ${datosUsuario.distrito}`}</p>
+                                    <p><strong>Estado:</strong> {datosUsuario.estado}</p>
+                                    <p><strong>Condición:</strong> {datosUsuario.condicion}</p>
+                                </>
+                            )}
+                        </div>
+                    )}
                 {datosUsuario && (
                     <div className=" p-4 pb-0 ">
                         <div className="mb-4">
@@ -311,6 +327,8 @@ export default function Register(){
                 
             </div>
         </div>
+    </div>
+
 
     )
 }
