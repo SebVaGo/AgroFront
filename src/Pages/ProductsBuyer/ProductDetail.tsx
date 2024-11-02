@@ -8,6 +8,7 @@ import { Link  } from "react-router-dom";
 import { API_BASE_URL } from "../../../config";
 
 export default function ProductDetails() {
+    
     const [productosPorCategoria, setProductosPorCategoria] = useState<allProductsProps[]>();
     const [formData, setFormData] = useLocalStorage('formData',  {
         id_producto: 0,
@@ -25,8 +26,11 @@ export default function ProductDetails() {
         },
     });
 
-    
+    const id_usuario = Number(sessionStorage.getItem('id_usuario')); // Convierte el id_usuario a number
 
+    console.log('id_usuario:', id_usuario);
+    console.log('Correo del vendedor:', formData.vendedor.correo);
+    console.log('API_BASE_URL:', API_BASE_URL);
 
     useEffect(() => {
         const axiosProductsByCategory = async () => {
@@ -47,6 +51,30 @@ export default function ProductDetails() {
         }, 1000);
     }, [formData.categoria]);
 
+
+    const handleLoDeseo = async () => {
+        console.log('id_usuario:', id_usuario);
+        console.log('Correo del vendedor:', formData.vendedor.correo);
+        console.log('API_BASE_URL:', API_BASE_URL);
+    
+        try {
+            const response = await axios.post(`${API_BASE_URL}api/product-list/contact-seller`, {
+                sellerEmail: formData.vendedor.correo,
+                buyerId: id_usuario,
+                productName: formData.nombre_item,       // Nombre del producto
+                productDescription: formData.descripcion // Descripción del producto
+            });
+    
+            if (response.status === 200) {
+                alert('¡El vendedor ha sido contactado exitosamente!');
+            }
+        } catch (error) {
+            console.error('Error al contactar al vendedor:', error);
+            alert('Hubo un problema al contactar al vendedor.');
+        }
+    };
+    
+    
     return (
         <div>
             <Navbar />
@@ -107,7 +135,7 @@ export default function ProductDetails() {
                                     </p>
                                 </div>
                                 <div className="flex justify-center mt-6">
-                                    <button className="w-3/4 bg-gray-200 text-gray-800 py-2 px-4 rounded-full font-bold hover:bg-gray-300">Lo deseo</button>
+                                    <button onClick={handleLoDeseo} className="w-3/4 bg-gray-200 text-gray-800 py-2 px-4 rounded-full font-bold hover:bg-gray-300">Lo deseo</button>
                                 </div>
                             </div>
                         </div>

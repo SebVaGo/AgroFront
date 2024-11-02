@@ -6,6 +6,7 @@ import fondoAgroWeb from '../../utils/images/FondoAgroWeb.webp';
 import logo from '../../utils/images/Logo.jpg';
 import {API_BASE_URL} from '../../../config';
 
+
 const Login = () => {
   const [formData, setFormData] = useState({
     correo: '',
@@ -30,63 +31,71 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post<userAccesToken>(`${API_BASE_URL}api/auth/login`, formData);
-      const { accessToken, primerLogin, id_usuario, perfiles, seleccionRequerida } = response.data;
+        const response = await axios.post<userAccesToken>(`${API_BASE_URL}api/auth/login`, formData);
+        const { accessToken, primerLogin, id_usuario, perfiles, seleccionRequerida } = response.data;
 
-      if (seleccionRequerida && perfiles && perfiles.length > 0) {
-        setPerfiles(perfiles);
-        setIdUsuario(id_usuario);
-        setMessage('Seleccione un perfil para continuar.');
-        return;
-      }
 
-      sessionStorage.setItem('accessToken', accessToken);
+        if (seleccionRequerida && perfiles && perfiles.length > 0) {
+            setPerfiles(perfiles);
+            setIdUsuario(id_usuario);
+            setMessage('Seleccione un perfil para continuar.');
+            return;
+        }
 
-      setAccessToken(accessToken);
-      setMessage('¡Inicio de sesión exitoso!');
+        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('id_usuario', id_usuario.toString()); // Convierte id_usuario a string antes de almacenarlo
 
-      if (primerLogin) {
-        navigate('/completa-perfil', { state: { accessToken, id_usuario } });
-      } else {
-        const timeResponse = await axios.get(`${API_BASE_URL}api/auth/left-time`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        setTimeLeft(timeResponse.data.timeLeft);
-        startAutoLogoutTimer(timeResponse.data.timeLeft);
-        navigate('/homepage');
-      }
+
+        setAccessToken(accessToken);
+
+        setMessage('¡Inicio de sesión exitoso!');
+
+        if (primerLogin) {
+            navigate('/completa-perfil', { state: { accessToken, id_usuario } });
+        } else {
+            const timeResponse = await axios.get(`${API_BASE_URL}api/auth/left-time`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            setTimeLeft(timeResponse.data.timeLeft);
+            startAutoLogoutTimer(timeResponse.data.timeLeft);
+            navigate('/homepage');
+        }
     } catch (error) {
-      setMessage('Fallo en el inicio de sesión.');
-      console.error('Error durante el login:', error);
+        setMessage('Fallo en el inicio de sesión.');
+        console.error('Error durante el login:', error);
     }
-  };
+};
 
-  const handlePerfilSeleccionado = async () => {
-    const perfilSeleccionado = perfiles?.find((perfil) => perfil.tipo_usuario === parseInt(selectedPerfil));
 
-    if (!perfilSeleccionado) {
+const handlePerfilSeleccionado = async () => {
+  const perfilSeleccionado = perfiles?.find((perfil) => perfil.tipo_usuario === parseInt(selectedPerfil));
+
+  if (!perfilSeleccionado) {
       setMessage('Perfil no válido seleccionado.');
       return;
-    }
+  }
 
-    try {
+  try {
       const response = await axios.post(`${API_BASE_URL}api/auth/loginConPerfil`, {  
-        id_usuario: perfilSeleccionado.id_usuario,
-        tipo_usuario: selectedPerfil,
+          id_usuario: perfilSeleccionado.id_usuario,
+          tipo_usuario: selectedPerfil,
       });
 
       const { accessToken } = response.data;
       sessionStorage.setItem('accessToken', accessToken);
+      sessionStorage.setItem('id_usuario', perfilSeleccionado.id_usuario.toString()); // Guardar el id_usuario del perfil seleccionado
+
       setAccessToken(accessToken);
       setMessage('¡Perfil seleccionado correctamente!');
       navigate('/homepage');
-    } catch (error) {
+  } catch (error) {
       setMessage('Error al seleccionar el perfil.');
       console.error('Error seleccionando perfil:', error);
-    }
-  };
+  }
+};
+
 
   const startAutoLogoutTimer = (time: number) => {
     const timer = setTimeout(() => {
