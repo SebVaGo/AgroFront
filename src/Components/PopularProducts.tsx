@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import { allProductsProps } from "../types";
+import useLocalStorage from '../localStorage';
 
 export default function PopularProduct(producto : allProductsProps){
+    //@ts-ignore
+    const [formData, setFormData] = useLocalStorage('formData', {});
     return(
         <Link to ={ `/product-details/${producto.id_producto}`}
         key={producto.id_producto}
         onClick={() => {
-            sessionStorage.setItem('producto', JSON.stringify(producto))
+            setFormData(producto)
         }
         }
         className="bg-white shadow-md rounded-lg overflow-hidden">
