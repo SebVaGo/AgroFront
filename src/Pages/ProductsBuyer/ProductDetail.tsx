@@ -5,6 +5,7 @@ import useLocalStorage from "../../localStorage";
 import axios from "axios";
 import { allProductsProps } from "../../types";
 import { Link  } from "react-router-dom";
+import { API_BASE_URL } from "../../../config";
 
 export default function ProductDetails() {
     const [productosPorCategoria, setProductosPorCategoria] = useState<allProductsProps[]>();
@@ -30,7 +31,7 @@ export default function ProductDetails() {
     useEffect(() => {
         const axiosProductsByCategory = async () => {
             try {
-                const response = await axios.post("https://agroweb-5dxm.onrender.com/api/product-list/filter", formData.categoria);
+                const response = await axios.post(`${API_BASE_URL}api/product-list/filter`, formData.categoria);
                 if (response.status === 404) {
                     throw new Error('Products not found');
                 }

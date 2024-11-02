@@ -8,6 +8,7 @@ import Lacteos from "../../../Public/lacteos.jpg";
 import { useEffect, useState } from "react";
 import { allProductsProps } from "../../types";
 import axios from "axios";
+import {API_BASE_URL} from '../../../config';
 
 const INITIAL_CATEGORY = [
     {
@@ -39,7 +40,7 @@ export default function HomerBuyer() {
     useEffect(() => {
         const fetchProductos = async () => {
             try {
-                const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/all");
+                const response = await axios.get(`${API_BASE_URL}api/product-list/all`);
                 setProductos(response.data.productos);
                 console.log(response.data.productos);
                 setMensaje("");
@@ -67,7 +68,7 @@ export default function HomerBuyer() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mb-8">
                 <h1 className="text-2xl md:text-3xl font-bold mt-4 text-center">ALGUNOS PRODUCTOS</h1>
                 {!productos ? (
                     <div className="h-96 flex items-center justify-center">
@@ -75,7 +76,7 @@ export default function HomerBuyer() {
                     </div>
                 ) : (
                 <div className="mt-5 flex justify-center w-5/6">
-                    <div className="grid grid-cols-2 w-5/6 md:grid-cols-5">
+                    <div className="grid grid-cols-2 space-x-4 w-5/6 md:grid-cols-5">
                     {
                        Array.isArray(productos) && productos
                        .sort(() => 0.5 - Math.random())

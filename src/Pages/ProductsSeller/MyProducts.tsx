@@ -4,6 +4,7 @@ import axios from "axios";
 import { ProductDetails, ProductDetailsProps } from "../../types";
 import Navbar from "../../Components/Navbar";
 import Footer from "../../Components/Footer";
+import { API_BASE_URL } from "../../../config";
 
 export default function HomeSeller() {
     const [productos, setProductos] = useState<ProductDetailsProps>();
@@ -22,7 +23,7 @@ export default function HomeSeller() {
         }
 
         try {
-            const response = await axios.get(`https://agroweb-5dxm.onrender.com/api/crud-product/all`, {
+            const response = await axios.get(`${API_BASE_URL}api/crud-product/all`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Enviar el token de autorización
                 },
@@ -64,7 +65,7 @@ export default function HomeSeller() {
         console.log('Categoría seleccionada:', selectedCategory);
 
         try {
-            const response = await axios.get<ProductDetailsProps>(`https://agroweb-5dxm.onrender.com/api/crud-product/category/${selectedCategory}`, {
+            const response = await axios.get<ProductDetailsProps>(`${API_BASE_URL}api/crud-product/category/${selectedCategory}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Enviar el token de autorización
                 },
@@ -102,7 +103,7 @@ export default function HomeSeller() {
         if (!confirmacion) return; // Si el usuario cancela, no hacer nada
 
         try {
-            const response = await axios.delete(`https://agroweb-5dxm.onrender.com/api/crud-product/productos/${id_producto}`, {
+            const response = await axios.delete(`${API_BASE_URL}api/crud-product/productos/${id_producto}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Enviar el token de autorización
                 },

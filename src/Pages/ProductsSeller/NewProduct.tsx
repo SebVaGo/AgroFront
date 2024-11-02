@@ -4,6 +4,7 @@ import { CategorySelect , extentSelect, itemSelect } from '../../types';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../../config';
 
 const CrudProduct = () => {
     const nav = useNavigate();
@@ -24,7 +25,7 @@ const CrudProduct = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                return await axios.get<CategorySelect>(`https://agroweb-5dxm.onrender.com/api/add-category/getCategories`).then((response) => response.data);
+                return await axios.get<CategorySelect>(`${API_BASE_URL}api/add-category/getCategories`).then((response) => response.data);
             } catch (error) {
                 console.error('Error al obtener las categorías', error);
             }
@@ -36,7 +37,7 @@ const CrudProduct = () => {
     useEffect(() => {
         const fetchMedidas = async () => {
             try {
-                return await axios.get<extentSelect>(`https://agroweb-5dxm.onrender.com/api/medida/medidas`).then((response) => response.data);
+                return await axios.get<extentSelect>(`${API_BASE_URL}api/medida/medidas`).then((response) => response.data);
             } catch (error) {
                 console.error('Error al obtener las medidas', error);
             }
@@ -53,7 +54,7 @@ const CrudProduct = () => {
         // Obtener los items de la categoría seleccionada
         try {
             const response = await axios.get<itemSelect>(
-                `https://agroweb-5dxm.onrender.com/api/add-category/getItemsByCategory/${categoriaId}`);
+                `${API_BASE_URL}api/add-category/getItemsByCategory/${categoriaId}`);
             console.log('Items de la categoría:', response.data);
             setItems(response.data);
         } catch (error) {
@@ -90,7 +91,7 @@ const CrudProduct = () => {
             console.log('Datos enviados al backend (FormData):', {
                 descripcion, precio, stock, selectedItem, selectedMedida
             });
-            const response = await axios.post(`https://agroweb-5dxm.onrender.com/api/crud-product/create`, formData, {
+            const response = await axios.post(`${API_BASE_URL}api/crud-product/create`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data', // Importante para enviar archivos

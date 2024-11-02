@@ -1,0 +1,1 @@
+export const API_BASE_URL = 'https://agroweb-5dxm.onrender.com/';

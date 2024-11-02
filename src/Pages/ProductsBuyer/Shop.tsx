@@ -4,18 +4,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../../Components/Footer';
 import Navbar from '../../Components/Navbar';
-import {  allProductsProps, CategoryProps, itemSelect } from '../../types';
+import {  allProductsProps, CategoryProps, itemProps } from '../../types';
 import { Link } from 'react-router-dom';
 import useLocalStorage from '../../localStorage';
+import { API_BASE_URL } from '../../../config';
 
 const PublicProductList = () => {
     //@ts-ignore
     const [formData, setFormData] = useLocalStorage('formData', {});
-    const [productos, setProductos] = useState<allProductsProps>();
+    const [productos, setProductos] = useState<allProductsProps | null>();
     const [mensaje, setMensaje] = useState("");
     const [categorias, setCategorias] = useState<Array<CategoryProps>>();
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [items, setItems] = useState<itemSelect>(); 
+    const [items, setItems] = useState<itemProps[]>(); 
     const [searchItem, setSearchItem] = useState(''); 
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
@@ -27,7 +28,7 @@ const PublicProductList = () => {
     useEffect(() => {
         const fetchProductos = async () => {
             try {
-                const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/all");
+                const response = await axios.get(`${API_BASE_URL}api/product-list/all`);
                 setProductos(response.data.productos);
                 
                 setMensaje("");
@@ -37,13 +38,13 @@ const PublicProductList = () => {
             }
         };
         fetchProductos();
-    }, [productos]);
+    }, []);
 
     // Obtener todas las categorías al cargar el componente
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get("https://agroweb-5dxm.onrender.com/api/add-category/getCategories");
+                const response = await axios.get(`${API_BASE_URL}api/add-category/getCategories`);
                 setCategorias(response.data.categorias);
             } catch (error) {
                 console.error('Error al obtener las categorías:', error);
@@ -56,7 +57,7 @@ const PublicProductList = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/items");
+                const response = await axios.get(`${API_BASE_URL}api/product-list/items`);
                 setItems(response.data.items);
             } catch (error) {
                 console.error('Error al obtener los items:', error);
@@ -81,7 +82,7 @@ const PublicProductList = () => {
         }
 
         try {
-            const response = await axios.post("https://agroweb-5dxm.onrender.com/api/product-list/filter", data);
+            const response = await axios.post(`${API_BASE_URL}api/product-list/filter`, data);
             setProductos(response.data.productos);
             console.log(response.data)
             setMensaje("");
@@ -100,7 +101,7 @@ const PublicProductList = () => {
     const fetchProductDetails = async (id_producto : number) => {
         console.log('ID del producto:', id_producto);
         try {
-            const response = await axios.post("https://agroweb-5dxm.onrender.com/api/product-description/description", { id_producto });
+            const response = await axios.post(`${API_BASE_URL}api/product-description/description`, { id_producto });
             setSelectedProduct(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del producto:', error);
@@ -108,12 +109,58 @@ const PublicProductList = () => {
         }
     };
 
+    const searchProductsByItem = async () => {
+        try {
+            const selectedItem = items?.find(item => item.nombre_item.toLowerCase() === searchItem.toLowerCase());
+            
+            if (!selectedItem) {
+                setMensaje('No se encontró ningún item con ese nombre.');
+                return;
+            }
+
+            console.log("Buscando productos relacionados con el item_id:", selectedItem.id_item);
+
+            const response = await axios.post(`${API_BASE_URL}api/product-description/byitem`, {
+                id_item: selectedItem.id_item
+            });
+
+            if (response.data ?? response.data.productos) {
+                setProductos(response.data.productos);
+                console.log('Productos encontrados:', response.data.productos);
+                setMensaje("");
+
+                // Hacer la petición para obtener el promedio del precio
+                const avgResponse = await axios.post(`${API_BASE_URL}api/average-price/average`, {
+                    id_item: selectedItem.id_item
+                });
+
+                if (avgResponse.data ?? avgResponse.data.averagePrice) {
+                    //setAveragePrice(avgResponse.data.averagePrice);
+                    console.log('Precio promedio encontrado:', avgResponse.data.averagePrice);
+                } else {
+                    //setAveragePrice(null);
+                    setMensaje('No se pudo obtener el precio promedio de este item.');
+                }
+            } else {
+                setMensaje('No se encontraron productos relacionados con este item.');
+                setProductos(null);
+                //setAveragePrice(null);
+            }
+        } catch (error) {
+            console.error('Error al buscar productos por item:', error);
+            setMensaje('Hubo un error al realizar la búsqueda.');
+            setProductos(null);
+            //setAveragePrice(null);
+        }
+    };
+
+
     return (
         <div>
             <Navbar/>
             <div className="container mx-auto p-4">
                 <h1 className="text-3xl font-bold mb-4">Listado Público de Productos</h1>
-                <div className="flex flex-wrap gap-4 mb-6">
+                <div className="flex flex-wrap gap-4 mb-3 bg-gray-300 p-4 rounded-lg shadow-lg">
                     {/* Filtro por categoría */}
                     <div className="w-full sm:w-1/2 lg:w-1/4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Filtrar por Categoría:</label>
@@ -123,7 +170,7 @@ const PublicProductList = () => {
                             className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
                         >
                             <option value="">Todas las Categorías</option>
-                            {categorias && categorias.map((categoria) => (
+                            {categorias && Array.isArray(categorias) && categorias.map((categoria) => (
                                 <option key={categoria.id_categoria} value={categoria.id_categoria}>
                                     {categoria.nombre_categoria}
                                 </option>
@@ -165,15 +212,28 @@ const PublicProductList = () => {
                     </div>
 
                     {/* Barra de búsqueda por Item */}
-                    <div className="w-full sm:w-1/2 lg:w-1/4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Buscar por Item:</label>
-                        <input
-                            type="text"
-                            value={searchItem}
-                            onChange={(e) => setSearchItem(e.target.value)}
-                            placeholder="Buscar por nombre del item"
-                            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
-                        />
+                    <div className="w-full flex items-center sm:w-1/2 lg:w-1/4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Buscar por Item:</label>
+                            <input
+                                type="text"
+                                value={searchItem}
+                                onChange={(e) => setSearchItem(e.target.value)}
+                                placeholder="Buscar por nombre del item"
+                                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
+                            />
+                        </div>
+                        <div className="flex justify-center mt-6 ml-2">
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    searchProductsByItem();
+                                }}
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            >
+                                Buscar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 {/* Mostrar mensaje si existe */}
@@ -181,7 +241,7 @@ const PublicProductList = () => {
 
                 {/* Mostrar productos en cards */}
                 {productos && Array.isArray(productos) && productos.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-gray-300 p-4 rounded-lg shadow-lg">
                     {productos.map((producto) => (
                     <Link to ={ `/product-details/${producto.id_producto}`}
                     key={producto.id_producto}
@@ -232,20 +292,7 @@ const PublicProductList = () => {
                     <p><strong>Teléfono:</strong> {selectedProduct.vendedor.telefono}</p>
                     <p><strong>Fecha de creación:</strong> {new Date(selectedProduct.vendedor.fecha_creacion).toLocaleDateString()}</p>
                 </div>
-                )}
-
-                {/* Mostrar la lista de todos los items obtenidos */}
-                {items && items.items && items.items.length > 0 && (
-                <div className="mt-8">
-                    <h2 className="text-2xl font-bold mb-4">Lista de Items</h2>
-                    <ul className="list-disc pl-5">
-                    {items.items.map((item) => (
-                        <li key={item.id_item}>{item.nombre_item}</li>
-                    ))}
-                    </ul>
-                </div>
-                )}
-                
+                )}*/}
             </div>
             <Footer/>
         </div>

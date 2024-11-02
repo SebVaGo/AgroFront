@@ -4,6 +4,7 @@ import HomerBuyer from "./HomerBuyer";
 import { useEffect , useState } from "react";
 import axios from "axios";
 import { userDniData, userRucData } from "../../types";
+import { API_BASE_URL } from "../../../config";
 
 export default function HomePage() {
     const [typeUser , setTypeUser] = useState<string | null>("");
@@ -14,7 +15,7 @@ export default function HomePage() {
                 const token = sessionStorage.getItem('accessToken');
                 if (!token) throw new Error('No token found');
 
-                return await axios.get<userDniData | userRucData | null>('https://agroweb-5dxm.onrender.com/api/seller/profile', {
+                return await axios.get<userDniData | userRucData | null>(`${API_BASE_URL}api/seller/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -25,19 +26,17 @@ export default function HomePage() {
             }
         };
 
-        setTimeout(() => {
-            fetchProfile().then((data) => {
-                if (data) {
-                    setTypeUser(data.tipoUsuario.tipo);
-                }
-            });
-            setRender(true);
-        },1000)
+        fetchProfile().then((data) => {
+            if (data) {
+                setTypeUser(data.tipoUsuario.tipo);
+            }
+        });
+        setRender(true);
 
     }, []);
 
     sessionStorage.setItem("typeUser", typeUser ?? '')
-    console.log(sessionStorage.getItem('typeUser'));
+    console.log("hola: ",sessionStorage.getItem('typeUser'));
 
     return (
         <div>

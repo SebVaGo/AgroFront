@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
 import { userDniData, userRucData } from '../../types';
+import { API_BASE_URL } from '../../../config';
 
 export default function SellerProfile() {
     const nav = useNavigate();
@@ -28,7 +29,7 @@ export default function SellerProfile() {
                 const token = sessionStorage.getItem('accessToken');
                 if (!token) throw new Error('No token found');
 
-                return await axios.get<userDniData | userRucData | null>('https://agroweb-5dxm.onrender.com/api/seller/profile', {
+                return await axios.get<userDniData | userRucData | null>(`${API_BASE_URL}api/seller/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -64,7 +65,7 @@ export default function SellerProfile() {
             const token = sessionStorage.getItem('accessToken');
             if (!token) throw new Error('AccessToken no disponible en sessionStorage.');
 
-            await axios.put('https://agroweb-5dxm.onrender.com/api/seller/update-profile', editedData, {
+            await axios.put(`${API_BASE_URL}api/seller/update-profile`, editedData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -5,6 +5,7 @@ import { datosUsuario, userDniRucData, UserType, userVerifyData } from "../../ty
 import { useNavigate } from "react-router-dom";
 import fondoAgroWeb from '../../utils/images/FondoAgroWeb.webp';
 import logo from '../../utils/images/Logo.jpg';
+import { API_BASE_URL } from '../../../config';
 
 export default function Register(){
     const nav = useNavigate();
@@ -30,7 +31,7 @@ export default function Register(){
         // Obtener los tipos de usuario al montar el componente
         const fetchTiposUsuario = async () => {
           try {
-            return await axios.get<UserType>('https://agroweb-5dxm.onrender.com/api/tipo-usuario/tipos-usuario').then(response => response.data);
+            return await axios.get<UserType>(`${API_BASE_URL}api/tipo-usuario/tipos-usuario`).then(response => response.data);
           } catch (error) {
             console.error('Error al obtener los tipos de usuario:', error);
             setError('Error al cargar los tipos de usuario.');
@@ -67,7 +68,7 @@ export default function Register(){
                 id_tipo_usuario: formData.id_tipo_usuario
             };
 
-            const response = await axios.post<userDniRucData>(`https://agroweb-5dxm.onrender.com/api/datos/obtener-datos`, payload);
+            const response = await axios.post<userDniRucData>(`${API_BASE_URL}api/datos/obtener-datos`, payload);
 
             setDatosUsuario(response.data.datosUsuario); 
             setSuccess(response.data.message);
@@ -83,7 +84,7 @@ export default function Register(){
         event.preventDefault();
         try{
             // @ts-ignore
-            const response = await axios.post(`https://agroweb-5dxm.onrender.com/api/auth/enviar-codigo`, {
+            const response = await axios.post(`${API_BASE_URL}api/auth/enviar-codigo`, {
                 correo: formData.correo,  // Asegúrate de que 'correo' está correctamente definido
                 dni_ruc: formData.dniRuc,  // Asegúrate de que 'dniRuc' está correctamente definido
                 tipo_usuario: formData.id_tipo_usuario  // Asegúrate de que 'id_tipo_usuario' está correctamente definido
@@ -100,7 +101,7 @@ export default function Register(){
         event.preventDefault();
         try {
             // @ts-ignore
-            const response = await axios.post(`https://agroweb-5dxm.onrender.com/api/auth/verify-email`, { 
+            const response = await axios.post(`${API_BASE_URL}api/auth/verify-email`, { 
               codigo: formData.codigoVerificacion, 
               dni_ruc: formData.dniRuc 
             });
@@ -125,7 +126,7 @@ export default function Register(){
               id_datos_dni: datosUsuario?.id_datos_dni,
             };
 
-            const response = await axios.post<userVerifyData>(`https://agroweb-5dxm.onrender.com/api/auth/finalizar-registro`, payload);
+            const response = await axios.post<userVerifyData>(`${API_BASE_URL}api/auth/finalizar-registro`, payload);
             setSuccess(response.data.message);
             nav('/');
         }catch{

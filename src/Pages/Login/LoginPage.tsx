@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userAccesToken } from '../../types';
 import fondoAgroWeb from '../../utils/images/FondoAgroWeb.webp';
 import logo from '../../utils/images/Logo.jpg';
+import {API_BASE_URL} from '../../../config';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post<userAccesToken>("https://agroweb-5dxm.onrender.com/api/auth/login", formData);
+      const response = await axios.post<userAccesToken>(`${API_BASE_URL}api/auth/login`, formData);
       const { accessToken, primerLogin, id_usuario, perfiles, seleccionRequerida } = response.data;
 
       if (seleccionRequerida && perfiles && perfiles.length > 0) {
@@ -40,13 +41,14 @@ const Login = () => {
       }
 
       sessionStorage.setItem('accessToken', accessToken);
+
       setAccessToken(accessToken);
       setMessage('¡Inicio de sesión exitoso!');
 
       if (primerLogin) {
         navigate('/completa-perfil', { state: { accessToken, id_usuario } });
       } else {
-        const timeResponse = await axios.get("https://agroweb-5dxm.onrender.com/api/auth/left-time", {
+        const timeResponse = await axios.get(`${API_BASE_URL}api/auth/left-time`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -70,7 +72,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("https://agroweb-5dxm.onrender.com/api/auth/loginConPerfil", {
+      const response = await axios.post(`${API_BASE_URL}api/auth/loginConPerfil`, {  
         id_usuario: perfilSeleccionado.id_usuario,
         tipo_usuario: selectedPerfil,
       });
@@ -161,7 +163,7 @@ const Login = () => {
                   />
                 </div>
                 <p className="text-center text-gray-600">
-                  ¿No tienes una cuenta? <a href="/register" className="text-blue-600 hover:underline"> Regístrate aquí.</a>
+                  ¿No tienes una cuenta? <Link to="/register" className="text-blue-600 hover:underline"> Regístrate aquí.</Link>
                 </p>
                 <button
                   type="submit"

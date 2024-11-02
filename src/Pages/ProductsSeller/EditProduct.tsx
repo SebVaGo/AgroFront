@@ -5,6 +5,7 @@ import axios from 'axios';
 import { CategorySelect, extentSelect, itemSelect } from '../../types';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
+import { API_BASE_URL } from '../../../config';
 
 export default function EditProduct() {
     const location = useLocation(); // Recibir el producto desde el estado de la navegación
@@ -27,7 +28,7 @@ export default function EditProduct() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get<CategorySelect>(`https://agroweb-5dxm.onrender.com/api/add-category/getCategories`);
+                const response = await axios.get<CategorySelect>(`${API_BASE_URL}api/add-category/getCategories`);
                 setCategorias(response.data);
             } catch (error) {
                 console.error('Error al obtener las categorías', error);
@@ -40,7 +41,7 @@ export default function EditProduct() {
     useEffect(() => {
         const fetchMedidas = async () => {
             try {
-                const response = await axios.get<extentSelect>(`https://agroweb-5dxm.onrender.com/api/medida/medidas`);
+                const response = await axios.get<extentSelect>(`${API_BASE_URL}api/medida/medidas`);
                 setMedidas(response.data);
             } catch (error) {
                 console.error('Error al obtener las medidas', error);
@@ -55,7 +56,7 @@ export default function EditProduct() {
             if (selectedCategory) {
                 try {
                     const response = await axios.get<itemSelect>(
-                        `https://agroweb-5dxm.onrender.com/api/add-category/getItemsByCategory/${selectedCategory}`
+                        `${API_BASE_URL}api/add-category/getItemsByCategory/${selectedCategory}`
                     );
                     setItems(response.data);
                 } catch (error) {
@@ -95,7 +96,7 @@ export default function EditProduct() {
             console.log('Datos enviados al backend (FormData):', {
                 descripcion, precio, stock, selectedItem, selectedMedida
             });
-            const response = await axios.put(`https://agroweb-5dxm.onrender.com/api/crud-product/productos/${producto.id_producto}`, formData, {
+            const response = await axios.put(`${API_BASE_URL}api/crud-product/productos/${producto.id_producto}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data', // Importante para enviar archivos

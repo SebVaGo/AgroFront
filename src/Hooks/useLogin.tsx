@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 // @ts-ignore
 import Modal from '../utils/Modal'; // Asegúrate de que la ruta sea correcta
+import { API_BASE_URL } from '../../config';
 
 interface Perfil {
   id_usuario: number;
@@ -46,7 +47,7 @@ export default function useLogin(){
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_APP_URL_BACK}api/auth/login`, formData);
+      const response = await axios.post(`${API_BASE_URL}api/auth/login`, formData);
       const { accessToken, primerLogin, id_usuario, perfiles, seleccionRequerida } = response.data;
   
       if (seleccionRequerida && perfiles.length > 0) {
@@ -63,7 +64,7 @@ export default function useLogin(){
       if (primerLogin) {
         navigate('/completa-perfil', { state: { accessToken, id_usuario } });
       } else {
-        const timeResponse = await axios.get(`${import.meta.env.VITE_APP_URL_BACK}api/auth/left-time`, {
+        const timeResponse = await axios.get(`${API_BASE_URL}api/auth/left-time`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -89,7 +90,7 @@ export default function useLogin(){
     }
   
     try {
-      const response = await axios.post(`${import.meta.env.VITE_APP_URL_BACK}api/auth/loginConPerfil`, {
+      const response = await axios.post(`${API_BASE_URL}api/auth/loginConPerfil`, {
         id_usuario: perfilSeleccionado.id_usuario,
         tipo_usuario: selectedPerfil,
       });

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../../config';
 
 export default function CompletaPerfil() {
     const nav = useNavigate();
@@ -43,7 +44,7 @@ export default function CompletaPerfil() {
         e.preventDefault();
         try {
             await axios.post(
-                `https://agroweb-5dxm.onrender.com/api/auth/complete-profile`,
+                `${API_BASE_URL}api/auth/complete-profile`,
                 { id_usuario, ...formData },  // Enviar el id_usuario y los datos del formulario
                 {
                     headers: {
