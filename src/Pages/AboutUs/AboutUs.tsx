@@ -21,14 +21,16 @@ export default function AboutUs(){
                             transition={{ delay: 0.3, duration: 0.8 }}
                         >
                             <div className="w-full flex-col justify-start lg:items-start items-center gap-4 flex">
-                                <h2 className="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">AGROWEB</h2>
+                                <h2 className="text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
+                                    <span className="text-green-800">AGRO</span><span className="text-gray-900">WEB</span>
+                                </h2>
                                 <p className="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
                                     AgroWeb es una plataforma sin fines de lucro diseñada para facilitar la compra y venta de productos agrícolas de manera directa y sin intermediarios, ayudando a campesinos a obtener un precio justo en el mercado y a incorporar tecnología en sus ventas. La plataforma también beneficia a los compradores, permitiéndoles interactuar directamente con los productores, obtener productos frescos y de calidad, y contribuir al desarrollo económico del sector agrícola.
                                 </p>
                             </div>
                         </motion.div>
                         <motion.img
-                            className="lg:mx-0 mx-auto h-full rounded-3xl object-cover"
+                            className="lg:mx-0 mx-auto h-full shadow-xl rounded-3xl object-cover"
                             src="https://img.freepik.com/foto-gratis/vision-mujer-que-trabaja-sector-agricola-celebrar-dia-trabajo-mujeres_23-2151252034.jpg?t=st=1730588433~exp=1730592033~hmac=eac3b68d2ca9864867983a123c3f0102261758314d1cf9bb25512a38a0f7909d&w=1380"
                             alt="about Us image"
                             initial={{ opacity: 0, x: -50 }}
