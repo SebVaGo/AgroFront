@@ -54,15 +54,15 @@ export default function Navbar (){
                                             Todos los productos
                                         </Link>)
                                         : 
-                                        <a href="#" title="" className="text-sm font-medium text-white hover:text-green-600">
+                                        <Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
                                         Sobre nosotros
-                                        </a>}
+                                        </Link>}
                                     </li>
                                     <li className="shrink-0">
                                         {typeUser === "VENDEDOR" ?
-                                         (<a href="#" title="" className="text-sm font-medium text-white hover:text-green-600">
+                                         (<Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
                                             Sobre nosotros
-                                        </a>)
+                                        </Link>)
                                         :
                                         (null)}
                                     </li>
@@ -159,9 +159,9 @@ export default function Navbar (){
                                 </a>
                             </li>
                             <li>
-                                <a href="#" title="" className="text-sm font-medium text-white hover:text-green-600">
+                                <Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
                                     Sobre nosotros
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
