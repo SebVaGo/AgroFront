@@ -53,6 +53,7 @@ const Login = () => {
         });
         setTimeLeft(timeResponse.data.timeLeft);
         startAutoLogoutTimer(timeResponse.data.timeLeft);
+        navigate('/homepage');
       }
     } catch (error) {
       setMessage('Fallo en el inicio de sesión.');
@@ -78,7 +79,7 @@ const Login = () => {
       sessionStorage.setItem('accessToken', accessToken);
       setAccessToken(accessToken);
       setMessage('¡Perfil seleccionado correctamente!');
-      navigate('/');
+      navigate('/homepage');
     } catch (error) {
       setMessage('Error al seleccionar el perfil.');
       console.error('Error seleccionando perfil:', error);
@@ -192,15 +193,7 @@ const Login = () => {
                 </button>
               </div>
             ) : (
-              <div className="space-y-6">
-                <h3 className="text-lg font-medium text-gray-900">Tiempo restante del token: {timeLeft !== null ? `${timeLeft} segundos` : 'Calculando...'}</h3>
-                <button
-                  onClick={handleLogout}
-                  className="w-full px-6 py-3 text-lg font-semibold text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
-                  Logout
-                </button>
-              </div>
+              null
             )}
 
             {message && <p className="mt-4 text-sm text-center text-red-600">{message}</p>}

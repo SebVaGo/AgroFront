@@ -16,16 +16,16 @@ import ProductSeller from "./Pages/ProductsSeller/MyProducts";
 function App() {
   return (
    <Routes>
-    <Route path="/login" element={<Login/>}/>
+    <Route path="/" element={<Login/>}/>
     <Route path="/register" element={<Register/>}/>
     <Route path="/profile" element={<SellerProfile/>}/>
-    <Route path="/" element={<HomePage/>}/>
+    <Route path="/homepage" element={<HomePage/>}/>
     <Route path="/completa-perfil" element={<CompletaPerfil/>}/>
     <Route path="/shop" element={<Shop/>}/>
     <Route path="/shopping-cart" element={<ShoppingCart/>}/>
     <Route path="/create-product" element={<CrudProduct/>}/>
     <Route path="/edit-product/:id" element={<EditProduct/>}/>
-    <Route path="/product/:id" element={<ProductDetails/>}/>
+    <Route path="/product-details/:id" element={<ProductDetails/>}/>
     <Route path="/my-products" element={<ProductSeller/>}/> 
     <Route path="*" element={<NotFound/>}/>
    </Routes>

@@ -115,8 +115,8 @@ const CrudProduct = () => {
         }
 
         setTimeout(() => {
-            nav('/');
-        }, 3000);
+            nav('/homepage');
+        }, 1000);
     };
 
     console.log(categorias);

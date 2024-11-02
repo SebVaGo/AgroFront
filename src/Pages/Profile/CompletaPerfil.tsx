@@ -53,8 +53,8 @@ export default function CompletaPerfil() {
             );
             setMessage('Perfil completado con éxito.');
             setTimeout(() => {
-                nav('/');
-            }, 2000);
+                nav('/homepage');
+            }, 1000);
         } catch (error) {
             setMessage('Error al completar el perfil. Inténtalo de nuevo.');
             if(axios.isAxiosError(error) && error) console.error('Error during profile completion:', error.response?.data?.error || error.message);

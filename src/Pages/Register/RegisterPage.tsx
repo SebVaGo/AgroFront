@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { datosUsuario, userDniRucData, UserType, userVerifyData } from "../../types";
@@ -70,7 +71,8 @@ export default function Register(){
 
             setDatosUsuario(response.data.datosUsuario); 
             setSuccess(response.data.message);
-
+            
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             setError('Ocurrió un error al obtener los datos.');
 
@@ -125,7 +127,7 @@ export default function Register(){
 
             const response = await axios.post<userVerifyData>(`https://agroweb-5dxm.onrender.com/api/auth/finalizar-registro`, payload);
             setSuccess(response.data.message);
-            nav('/login');
+            nav('/');
         }catch{
             setError('Error al finalizar el registro.');
         }

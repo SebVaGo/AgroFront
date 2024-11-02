@@ -4,10 +4,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from '../../Components/Footer';
 import Navbar from '../../Components/Navbar';
-
 import {  allProductsProps, CategoryProps, itemSelect } from '../../types';
+import { Link } from 'react-router-dom';
+import useLocalStorage from '../../localStorage';
 
 const PublicProductList = () => {
+    //@ts-ignore
+    const [formData, setFormData] = useLocalStorage('formData', {});
     const [productos, setProductos] = useState<allProductsProps>();
     const [mensaje, setMensaje] = useState("");
     const [categorias, setCategorias] = useState<Array<CategoryProps>>();
@@ -26,14 +29,15 @@ const PublicProductList = () => {
             try {
                 const response = await axios.get("https://agroweb-5dxm.onrender.com/api/product-list/all");
                 setProductos(response.data.productos);
-                    setMensaje("");
+                
+                setMensaje("");
             } catch (error) {
                 console.error('Error al obtener los productos:', error);
                 setMensaje('Error al obtener los productos.');
             }
         };
         fetchProductos();
-    }, []);
+    }, [productos]);
 
     // Obtener todas las categorías al cargar el componente
     useEffect(() => {
@@ -179,7 +183,14 @@ const PublicProductList = () => {
                 {productos && Array.isArray(productos) && productos.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {productos.map((producto) => (
-                    <div key={producto.id_producto} className="bg-white shadow-md rounded-lg overflow-hidden">
+                    <Link to ={ `/product-details/${producto.id_producto}`}
+                    key={producto.id_producto}
+                    onClick={() => {
+                        setFormData(producto);
+                        sessionStorage.setItem('producto', JSON.stringify(producto))
+                    }
+                    }
+                     className="bg-white shadow-md rounded-lg overflow-hidden">
                         <div className="relative">
                         {producto.imagen_url ? (
                             <img
@@ -193,18 +204,10 @@ const PublicProductList = () => {
                         )}
                         </div>
                         <div className="p-4">
-                        <h2 className="text-lg font-semibold">{producto.descripcion}</h2>
-                        <p className="text-gray-600">Precio: {producto.precio}</p>
-                        <p className="text-gray-600">Stock: {producto.stock}</p>
-                        <p className="text-gray-600">Medida: {producto.medida || 'Sin medida'}</p>
-                        <p className="text-gray-600">Item: {producto.nombre_item || 'Sin item'}</p>
-                        <p className="text-gray-600">Categoría: {producto.categoria || 'Sin categoría'}</p>
-                        <p className="text-gray-600">Vendedor: {producto.vendedor.nombre || 'Sin nombre'}</p>
-                        <p className="text-gray-600">Correo: {producto.vendedor.correo}</p>
-                        <p className="text-gray-600">Teléfono: {producto.vendedor.telefono}</p>
-                        <p className="text-gray-600">Fecha de Creación: {producto.vendedor.fecha_creacion ? new Date(producto.vendedor.fecha_creacion).toLocaleDateString() : 'Fecha no disponible'}</p>
+                            <p className="text-gray-600 font-semibold">Item: {producto.nombre_item || 'Sin item'}</p>
+                            <p className="text-gray-600">Precio: {producto.precio}</p>
                         </div>
-                    </div>
+                    </Link>
                     ))}
                 </div>
                 ) : (

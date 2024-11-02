@@ -1,65 +1,48 @@
 import { useState , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ProductDetails, ProductDetailsProps ,CategorySelect } from "../../types";
+import { ProductDetails, ProductDetailsProps } from "../../types";
 import Navbar from "../../Components/Navbar";
 import Footer from "../../Components/Footer";
 
 export default function HomeSeller() {
     const [productos, setProductos] = useState<ProductDetailsProps>();
     const [mensaje, setMensaje] = useState<string>();
-    const [categorias, setCategorias] = useState<CategorySelect>();
+    //const [categorias, setCategorias] = useState<CategorySelect>();
     const [selectedCategory, setSelectedCategory] = useState('');
     const navigate = useNavigate(); // Hook para redirigir al usuario a la página de edición
 
     // Obtener todos los productos del vendedor
+    const fetchProductos = async () => {
+        const token = sessionStorage.getItem('accessToken'); // Obtener el token de acceso desde sessionStorage
+
+        if (!token) {
+            setMensaje('Debe iniciar sesión para ver los productos.');
+            return;
+        }
+
+        try {
+            const response = await axios.get(`https://agroweb-5dxm.onrender.com/api/crud-product/all`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Enviar el token de autorización
+                },
+            });
+
+            console.log('Productos del vendedor:', response.data);
+            if (response.data.productos.length > 0) {
+                setProductos(response.data.productos);
+            } else {
+                setMensaje('No hay productos disponibles.');
+            }
+        } catch (error) {
+            console.error('Error al obtener los productos:', error);
+            setMensaje('Error al obtener los productos.');
+        }
+    };
     useEffect(() => {
-        const fetchProductos = async () => {
-            const token = sessionStorage.getItem('accessToken'); // Obtener el token de acceso desde sessionStorage
-
-            if (!token) {
-                setMensaje('Debe iniciar sesión para ver los productos.');
-                return;
-            }
-
-            try {
-                const response = await axios.get(`https://agroweb-5dxm.onrender.com/api/crud-product/all`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Enviar el token de autorización
-                    },
-                });
-
-                console.log('Productos del vendedor:', response.data);
-                if (response.data.productos.length > 0) {
-                    setProductos(response.data.productos);
-                } else {
-                    setMensaje('No hay productos disponibles.');
-                }
-            } catch (error) {
-                console.error('Error al obtener los productos:', error);
-                setMensaje('Error al obtener los productos.');
-            }
-        };
-
-        fetchProductos(); // Llamar a la función al cargar el componente
-    }, []);
-
-    // Obtener las categorías disponibles
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get<CategorySelect>(`https://agroweb-5dxm.onrender.com/api/add-category/getCategories`); // Cambia la URL según tu API
-                setCategorias(response.data);
-                console.log('Categorías:', response.data);
-            } catch (error) {
-                console.error('Error al obtener las categorías', error);
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
-    // Manejar el cambio de categoría
+        fetchProductos();     
+    }, [productos]);
+  // Manejar el cambio de categoría
     const handleCategoryChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCategory(e.target.value);
     };
@@ -91,7 +74,6 @@ export default function HomeSeller() {
             if (response.data.productos.length > 0) {
                 setProductos(response.data);
                 setMensaje("");
-
             } 
             if(response.data.productos.length === 0){
                 setMensaje('No hay productos disponibles en esta categoría.');
@@ -126,24 +108,16 @@ export default function HomeSeller() {
                 },
             });
 
+            console.log('Respuesta de eliminación:', response.data);
             if (response.status === 200) {
                 setMensaje('Producto eliminado exitosamente');
-                setProductos((prevProductos) => ({
-                    ...prevProductos,
-                    productos: prevProductos?.productos.filter(producto => producto.id_producto !== id_producto) || []
-                })); // Eliminar el producto del estado local
+                console.log("Se eliminó:", mensaje);
             }
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
             setMensaje('Error al eliminar el producto.');
         }
-
-        setTimeout(() => {
-            navigate('/homepage');
-        }, 2000);
     };
-
-    
 
     return (
         <div>
@@ -162,11 +136,11 @@ export default function HomeSeller() {
                         className="border border-gray-300 rounded p-2 mr-2"
                     >
                         <option value="">Selecciona una categoría</option>
-                        {Array.isArray(categorias?.categorias) && categorias.categorias.map((categoria) => (
+                        {/* {Array.isArray(categorias?.categorias) && categorias.categorias.map((categoria) => (
                         <option key={categoria.id_categoria} value={categoria.id_categoria}>
                             {categoria.nombre_categoria}
                         </option>
-                        ))}
+                        ))} */}
                     </select>
                     <button 
                         onClick={fetchProductsByCategory} 
@@ -223,7 +197,9 @@ export default function HomeSeller() {
                                     Editar
                                 </button>
                                 <button 
-                                    onClick={() => handleDeleteProduct(producto.id_producto)} 
+                                    onClick={(e) =>
+                                       { e.preventDefault();
+                                        handleDeleteProduct(producto.id_producto)}} 
                                     className="bg-red-500 text-white p-2 rounded"
                                 >
                                     Eliminar
