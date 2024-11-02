@@ -107,7 +107,7 @@ export default function Navbar (){
                                             <button onClick={()=>{
                                                 sessionStorage.removeItem('accessToken');
                                                 sessionStorage.removeItem('typeUser');
-                                                window.location.href = '/login';
+                                                window.location.href = '/';
                                             }} className="block w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 hover:text-red-700" role="menuitem">Cerrar Sesión</button>
                                         </div>
                                     </div>
