@@ -43,9 +43,9 @@ export default function Navbar (){
                                         Mis productos
                                         </Link>
                                         : 
-                                        <a href="/#" title="" className="text-sm font-medium text-white hover:text-green-600">
-                                            Contáctanos    
-                                        </a>
+                                        <Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
+                                        Sobre nosotros
+                                        </Link>
                                         }
                                     </li>
                                     <li className="shrink-0">
@@ -54,18 +54,16 @@ export default function Navbar (){
                                             Todos los productos
                                         </Link>)
                                         : 
-                                        <Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
-                                        Sobre nosotros
-                                        </Link>}
+                                        null}
                                     </li>
-                                    <li className="shrink-0">
+                                    {/* <li className="shrink-0">
                                         {typeUser === "VENDEDOR" ?
                                          (<Link to="/aboutus" title="" className="text-sm font-medium text-white hover:text-green-600">
                                             Sobre nosotros
                                         </Link>)
                                         :
                                         (null)}
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
 

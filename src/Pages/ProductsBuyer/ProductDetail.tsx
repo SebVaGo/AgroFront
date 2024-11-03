@@ -4,11 +4,11 @@ import Navbar from "../../Components/Navbar"
 import useLocalStorage from "../../localStorage";
 import axios from "axios";
 import { allProductsProps } from "../../types";
-import { Link  } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import { API_BASE_URL } from "../../../config";
 
 export default function ProductDetails() {
-    
+    const nav = useNavigate();
     const [productosPorCategoria, setProductosPorCategoria] = useState<allProductsProps[]>();
     const [formData, setFormData] = useLocalStorage('formData',  {
         id_producto: 0,
@@ -149,7 +149,7 @@ export default function ProductDetails() {
                     <h2 className="text-2xl font-bold text-gray-800 mb-6">Productos Relacionados</h2>
                     <div className="flex overflow-x-scroll space-x-4 pb-2">
                         {productosPorCategoria?.filter(producto => producto.id_producto !== formData.id_producto).map((producto) => (
-                            <Link to ={ `/product-details/${producto.id_producto}`}
+                            <div 
                             key={producto.id_producto} 
                             onClick={() => {
                                 setFormData({
@@ -167,8 +167,9 @@ export default function ProductDetails() {
                                         telefono: producto.vendedor.telefono,
                                     },
                                 })
+                                nav(`/product-details/${producto.id_producto}`)
                             }}
-                            className="flex-none max-w-64 bg-gray-100 rounded-lg shadow-md">
+                            className="flex-none max-w-64 w-64 bg-gray-100 rounded-lg shadow-md">
                                 <div className="h-40 bg-gray-300 rounded-t-lg">
                                     <img
                                         className="w-full h-full object-cover rounded-t-lg"
@@ -186,7 +187,7 @@ export default function ProductDetails() {
                                         <span className="text-gray-600">{producto.precio}</span>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 </div>

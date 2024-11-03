@@ -11,7 +11,7 @@ import CrudProduct from "./Pages/ProductsSeller/NewProduct";
 import EditProduct from "./Pages/ProductsSeller/EditProduct";
 import ProductDetails from "./Pages/ProductsBuyer/ProductDetail";
 import ProductSeller from "./Pages/ProductsSeller/MyProducts";
-import AboutUs from "./Pages/AboutUs/AboutUs";
+import Us from "./Pages/AboutUs/Us";
 
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
     <Route path="/edit-product/:id" element={<EditProduct/>}/>
     <Route path="/product-details/:id" element={<ProductDetails/>}/>
     <Route path="/my-products" element={<ProductSeller/>}/> 
-    <Route path="/aboutus" element={<AboutUs/>}/>
+    <Route path="/aboutus" element={<Us/>}/>
     <Route path="*" element={<NotFound/>}/>
    </Routes>
   )

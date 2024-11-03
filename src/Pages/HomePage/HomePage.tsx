@@ -5,6 +5,7 @@ import { useEffect , useState } from "react";
 import axios from "axios";
 import { userDniData, userRucData } from "../../types";
 import { API_BASE_URL } from "../../../config";
+import AboutUs from "../../Components/AboutUs";
 
 export default function HomePage() {
     const [typeUser , setTypeUser] = useState<string | null>("");
@@ -52,7 +53,7 @@ export default function HomePage() {
             (
                 <div>
                 <Navbar />
-                <HomerBuyer />
+                {typeUser === "COMPRADOR" ? <HomerBuyer /> : <AboutUs />}
                 <Footer />
                 </div>
             )

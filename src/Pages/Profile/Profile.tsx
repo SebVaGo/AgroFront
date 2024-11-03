@@ -57,7 +57,7 @@ export default function SellerProfile() {
         sessionStorage.removeItem('timeLeft');
         sessionStorage.removeItem('typeUser');
         setMessage('Session expired. Please log in again.');
-        nav('/login');
+        nav('/');
     };
 
     const handleSave = async () => {

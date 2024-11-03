@@ -12,7 +12,7 @@ export default function HomeSeller() {
     //const [categorias, setCategorias] = useState<CategorySelect>();
     const [selectedCategory, setSelectedCategory] = useState('');
     const navigate = useNavigate(); // Hook para redirigir al usuario a la página de edición
-
+    const [productLength , setProctLenght] = useState(0);
     // Obtener todos los productos del vendedor
     const fetchProductos = async () => {
         const token = sessionStorage.getItem('accessToken'); // Obtener el token de acceso desde sessionStorage
@@ -31,6 +31,7 @@ export default function HomeSeller() {
 
             console.log('Productos del vendedor:', response.data);
             if (response.data.productos.length > 0) {
+                setProctLenght(response.data.productos.length);
                 setProductos(response.data.productos);
             } else {
                 setMensaje('No hay productos disponibles.');
@@ -42,12 +43,11 @@ export default function HomeSeller() {
     };
     useEffect(() => {
         fetchProductos();     
-    }, [productos]);
+    }, [productLength]);
   // Manejar el cambio de categoría
     const handleCategoryChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCategory(e.target.value);
     };
-
     // Obtener los productos de la categoría seleccionada
     const fetchProductsByCategory = async () => {
         if (!selectedCategory) {
@@ -111,8 +111,13 @@ export default function HomeSeller() {
 
             console.log('Respuesta de eliminación:', response.data);
             if (response.status === 200) {
+                setProctLenght(productLength - 1);
                 setMensaje('Producto eliminado exitosamente');
                 console.log("Se eliminó:", mensaje);
+                setTimeout(() => {
+                    setMensaje("");
+                }
+                , 2000);
             }
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
