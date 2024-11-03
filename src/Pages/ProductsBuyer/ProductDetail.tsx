@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../../../config";
 
 export default function ProductDetails() {
     const nav = useNavigate();
+    const [productosPorVendedor, setProductosPorVendedor] = useState<allProductsProps[]>();
     const [productosPorCategoria, setProductosPorCategoria] = useState<allProductsProps[]>();
     const [formData, setFormData] = useLocalStorage('formData',  {
         id_producto: 0,
@@ -51,6 +52,27 @@ export default function ProductDetails() {
         }, 1000);
     }, [formData.categoria]);
 
+    useEffect(() => {
+        const axiosProductsBySeller = async () => {
+            try{
+                const response = await axios.post(`${API_BASE_URL}api/product-list/seller-products`, {
+                    sellerEmail: formData.vendedor.correo
+                });
+                if (response.status === 404) {
+                    throw new Error('Products not found');
+                }
+                setProductosPorVendedor(response.data.productos);
+                console.log('Products by seller:', response.data.productos);
+            } catch (error) {
+                console.error('Error fetching products by seller:', error);
+            }
+        };
+
+        setTimeout(() => {
+            axiosProductsBySeller();
+        }, 1000);
+
+    }, [productosPorVendedor]);
 
     const handleLoDeseo = async () => {
         console.log('id_usuario:', id_usuario);
@@ -144,55 +166,109 @@ export default function ProductDetails() {
             </div>
 
             <div className="w-full py-2 px-4 mb-2">
-            <div className="bg-gray-100 p-8 shadow-xl rounded-lg">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6">Productos Relacionados</h2>
-                    <div className="flex overflow-x-scroll space-x-4 pb-2">
-                        {productosPorCategoria?.filter(producto => producto.id_producto !== formData.id_producto).map((producto) => (
-                            <div 
-                            key={producto.id_producto} 
-                            onClick={() => {
-                                setFormData({
-                                    id_producto: producto.id_producto,
-                                    nombre_item: producto.nombre_item,
-                                    descripcion: producto.descripcion,
-                                    precio: producto.precio,
-                                    stock: producto.stock,
-                                    categoria: producto.categoria,
-                                    imagen_url: producto.imagen_url,
-                                    vendedor: {
-                                        fecha_creacion: producto.vendedor.fecha_creacion,
-                                        nombre: producto.vendedor.nombre,
-                                        correo: producto.vendedor.correo,
-                                        telefono: producto.vendedor.telefono,
-                                    },
-                                })
-                                nav(`/product-details/${producto.id_producto}`)
-                            }}
-                            className="flex-none max-w-64 w-64 bg-gray-100 rounded-lg shadow-md">
-                                <div className="h-40 bg-gray-300 rounded-t-lg">
-                                    <img
-                                        className="w-full h-full object-cover rounded-t-lg"
-                                        src={producto.imagen_url}
-                                        alt={producto.nombre_item}
-                                    />
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="text-lg font-bold text-gray-800">{producto.nombre_item}</h3>
-                                    <p className="text-gray-600 text-sm">
-                                        {producto.descripcion.length > 100 ? `${producto.descripcion.substring(0, 100)}...` : producto.descripcion}
-                                    </p>
-                                    <div className="mt-2">
-                                        <span className="font-bold text-gray-700">Precio: </span>
-                                        <span className="text-gray-600">{producto.precio}</span>
+                <div className="bg-gray-100 p-8 shadow-xl rounded-lg">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Productos Relacionados</h2>
+                        <div className="flex overflow-x-scroll space-x-4 pb-2">
+                            {productosPorCategoria?.filter(producto => producto.id_producto !== formData.id_producto).map((producto) => (
+                                <div 
+                                key={producto.id_producto} 
+                                onClick={() => {
+                                    setFormData({
+                                        id_producto: producto.id_producto,
+                                        nombre_item: producto.nombre_item,
+                                        descripcion: producto.descripcion,
+                                        precio: producto.precio,
+                                        stock: producto.stock,
+                                        categoria: producto.categoria,
+                                        imagen_url: producto.imagen_url,
+                                        vendedor: {
+                                            fecha_creacion: producto.vendedor.fecha_creacion,
+                                            nombre: producto.vendedor.nombre,
+                                            correo: producto.vendedor.correo,
+                                            telefono: producto.vendedor.telefono,
+                                        },
+                                    })
+                                    nav(`/product-details/${producto.id_producto}`)
+                                }}
+                                className="flex-none max-w-64 w-64 bg-gray-100 rounded-lg shadow-md">
+                                    <div className="h-40 bg-gray-300 rounded-t-lg">
+                                        <img
+                                            className="w-full h-full object-cover rounded-t-lg"
+                                            src={producto.imagen_url}
+                                            alt={producto.nombre_item}
+                                        />
+                                    </div>
+                                    <div className="p-4">
+                                        <h3 className="text-lg font-bold text-gray-800">{producto.nombre_item}</h3>
+                                        <p className="text-gray-600 text-sm">
+                                            {producto.descripcion.length > 100 ? `${producto.descripcion.substring(0, 100)}...` : producto.descripcion}
+                                        </p>
+                                        <div className="mt-2">
+                                            <span className="font-bold text-gray-700">Precio: </span>
+                                            <span className="text-gray-600">{producto.precio}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
+            <div className="w-full py-2 px-4 mb-2">
+                <div className="bg-gray-100 p-8 shadow-xl rounded-lg">
+                    {productosPorVendedor && Array.isArray(productosPorVendedor) && productosPorVendedor.length > 1 ?
+                    (<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Otros productos de {formData.vendedor.nombre}</h2>
+                           <div className="flex overflow-x-scroll space-x-4 pb-2">
+                            {productosPorVendedor?.filter(producto => producto.id_producto !== formData.id_producto).map((producto) => (
+                                <div 
+                                key={producto.id_producto} 
+                                onClick={() => {
+                                    setFormData({
+                                        id_producto: producto.id_producto,
+                                        nombre_item: producto.nombre_item,
+                                        descripcion: producto.descripcion,
+                                        precio: producto.precio,
+                                        stock: producto.stock,
+                                        categoria: producto.categoria,
+                                        imagen_url: producto.imagen_url,
+                                        vendedor: {
+                                            fecha_creacion: producto.vendedor.fecha_creacion,
+                                            nombre: producto.vendedor.nombre,
+                                            correo: producto.vendedor.correo,
+                                            telefono: producto.vendedor.telefono,
+                                        },
+                                    })
+                                    nav(`/product-details/${producto.id_producto}`)
+                                }}
+                                className="flex-none max-w-64 w-64 bg-gray-100 rounded-lg shadow-md">
+                                    <div className="h-40 bg-gray-300 rounded-t-lg">
+                                        <img
+                                            className="w-full h-full object-cover rounded-t-lg"
+                                            src={producto.imagen_url}
+                                            alt={producto.nombre_item}
+                                        />
+                                    </div>
+                                    <div className="p-4">
+                                        <h3 className="text-lg font-bold text-gray-800">{producto.nombre_item}</h3>
+                                        <p className="text-gray-600 text-sm">
+                                            {producto.descripcion.length > 100 ? `${producto.descripcion.substring(0, 100)}...` : producto.descripcion}
+                                        </p>
+                                        <div className="mt-2">
+                                            <span className="font-bold text-gray-700">Precio: </span>
+                                            <span className="text-gray-600">{producto.precio}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>) : (<div className="flex justify-center items-center h-64">
+                        <p className="text-xl text-gray-600">No hay otros productos del vendedor.</p>
+                    </div>)}
+                </div>
             </div>
+            
             <Footer />
      </div>
     );
