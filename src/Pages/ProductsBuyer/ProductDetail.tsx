@@ -29,14 +29,12 @@ export default function ProductDetails() {
 
     const id_usuario = Number(sessionStorage.getItem('id_usuario')); // Convierte el id_usuario a number
 
-    console.log('id_usuario:', id_usuario);
-    console.log('Correo del vendedor:', formData.vendedor.correo);
-    console.log('API_BASE_URL:', API_BASE_URL);
-
     useEffect(() => {
         const axiosProductsByCategory = async () => {
             try {
-                const response = await axios.post(`${API_BASE_URL}api/product-list/filter`, formData.categoria);
+                const response = await axios.post(`${API_BASE_URL}api/product-list/category`, {
+                    categoryName : formData.categoria
+                });
                 if (response.status === 404) {
                     throw new Error('Products not found');
                 }
@@ -46,10 +44,7 @@ export default function ProductDetails() {
                 console.error('Error fetching products by category:', error);
             }
         };
-
-        setTimeout(() => {
-            axiosProductsByCategory();
-        }, 1000);
+        axiosProductsByCategory();
     }, [formData.categoria]);
 
     useEffect(() => {

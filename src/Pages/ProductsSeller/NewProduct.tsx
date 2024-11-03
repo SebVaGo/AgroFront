@@ -216,7 +216,9 @@ const CrudProduct = () => {
                                     />
                                 </div>
                                 <div className='grid'>
-                                    {averagePrice && <p className="text-start mb-2">Precio recomendado: {averagePrice}</p>}
+                                    {averagePrice !== undefined && averagePrice > 0 ? 
+                                    <p className="text-start mb-2">Precio recomendado: {averagePrice}</p>
+                                    : <p className="text-start mb-2">No hay suficientes datos para calcular un precio promedio</p>}
                                     <div className='flex justify-between flex-wrap space'>
                                         <div className="flex justify-between w-1/2 block text-sm font-medium mb-1">
                                             <p className='pt-2'>Precio:</p> 
