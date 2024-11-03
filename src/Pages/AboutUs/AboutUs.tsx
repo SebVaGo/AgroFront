@@ -6,7 +6,7 @@ export default function AboutUs(){
     return(
         <div>
             <Navbar/>
-            <section className="py-24 relative">
+            <section className="py-12 mt-12 relative">
                 <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto rounded-lg">
                     <motion.div
                         className="w-full justify-start items-center gap-8 grid lg:grid-cols-2 grid-cols-1"
