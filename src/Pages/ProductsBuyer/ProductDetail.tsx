@@ -6,7 +6,6 @@ import axios from "axios";
 import { allProductsProps } from "../../types";
 import { useNavigate  } from "react-router-dom";
 import { API_BASE_URL } from "../../../config";
-import { form } from "framer-motion/client";
 
 export default function ProductDetails() {
     const nav = useNavigate();
