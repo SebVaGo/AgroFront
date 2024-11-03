@@ -28,6 +28,7 @@ const CrudProduct = () => {
     const [selectedMedida, setSelectedMedida] = useState('');
     const [mensaje, setMensaje] = useState("");
     const [imagen, setImagen] = useState<File | null>(null);
+    const [averagePrice, setAveragePrice] = useState<number>();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -52,6 +53,21 @@ const CrudProduct = () => {
         };
         fetchMedidas();
     }, []);
+
+    const axiosAveragePrice = async (idItem : number) => {
+        try{
+            const response = await axios.post(`${API_BASE_URL}api/average-price/average`, {"id_item" : idItem});
+            if(response.status === 200){
+                setAveragePrice(response.data.averagePrice);
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 404) {
+                setAveragePrice(0);
+            } else {
+                console.error('Error al obtener el precio promedio', error);
+            }
+        }
+    }
 
     const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const categoriaId = e.target.value;
@@ -138,7 +154,10 @@ const CrudProduct = () => {
                         <select
                             className="w-full p-2 border border-gray-300 rounded-md"
                             value={selectedItem}
-                            onChange={(e) => setSelectedItem(e.target.value)}
+                            onChange={(e) => {
+                                setSelectedItem(e.target.value);
+                                axiosAveragePrice(parseInt(e.target.value));
+                            }}
                             disabled={!selectedCategory}
                         >
                             <option value="">Selecciona un producto</option>
@@ -196,27 +215,30 @@ const CrudProduct = () => {
                                         required
                                     />
                                 </div>
-                                <div className='flex justify-between flex-wrap space'>
-                                    <div className="flex justify-between w-1/2 block text-sm font-medium mb-1">
-                                        <p className='pt-2'>Precio:</p> 
-                                        <input
-                                            className="w-3/4 p-2 border border-gray-300 rounded-md"
-                                            type="number"
-                                            step="0.01"
-                                            value={precio}
-                                            onChange={(e) => setPrecio(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex justify-between w-1/2 block text-sm font-medium mb-1">
-                                        <p className='pt-2 pl-3'>Stock:</p>
-                                        <input
-                                            className="w-3/4 p-2 border border-gray-300 rounded-md"
-                                            type="number"
-                                            value={stock}
-                                            onChange={(e) => setStock(e.target.value)}
-                                            required
-                                        />
+                                <div className='grid'>
+                                    {averagePrice && <p className="text-start mb-2">Precio recomendado: {averagePrice}</p>}
+                                    <div className='flex justify-between flex-wrap space'>
+                                        <div className="flex justify-between w-1/2 block text-sm font-medium mb-1">
+                                            <p className='pt-2'>Precio:</p> 
+                                            <input
+                                                className="w-3/4 p-2 border border-gray-300 rounded-md"
+                                                type="number"
+                                                step="0.01"
+                                                value={precio}
+                                                onChange={(e) => setPrecio(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="flex justify-between w-1/2 block text-sm font-medium mb-1">
+                                            <p className='pt-2 pl-3'>Stock:</p>
+                                            <input
+                                                className="w-3/4 p-2 border border-gray-300 rounded-md"
+                                                type="number"
+                                                value={stock}
+                                                onChange={(e) => setStock(e.target.value)}
+                                                required
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <button 

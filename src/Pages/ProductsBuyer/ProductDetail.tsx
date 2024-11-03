@@ -6,6 +6,7 @@ import axios from "axios";
 import { allProductsProps } from "../../types";
 import { useNavigate  } from "react-router-dom";
 import { API_BASE_URL } from "../../../config";
+import { form } from "framer-motion/client";
 
 export default function ProductDetails() {
     const nav = useNavigate();
@@ -72,7 +73,7 @@ export default function ProductDetails() {
             axiosProductsBySeller();
         }, 1000);
 
-    }, [productosPorVendedor]);
+    }, [formData.vendedor.correo]);
 
     const handleLoDeseo = async () => {
         console.log('id_usuario:', id_usuario);
